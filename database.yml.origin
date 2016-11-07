@@ -1,0 +1,16 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  database: test_db
+
+development_test_db:
+  <<: *default
+  username: xxx
+  password: xxx
+  host: xxx
+production_test_db:
+  <<: *default
+  username: xxx
+  password: xxx
+  host: xxx
+
