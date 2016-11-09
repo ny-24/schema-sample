@@ -25,3 +25,4 @@ config.yml
 *.swp
 database.yml
 vendor/
+.env
