@@ -3,8 +3,27 @@ require "json"
 require "tmpdir"
 require "fileutils"
 require "open3"
+require "dotenv"
+require "slack/incoming/webhooks"
+
+Dotenv.load
+SLACK_WEB_HOOK_URL = ENV['SLACK_WEB_HOOK_URL']
 
 PROJECT_DIR = File.expand_path("..", __FILE__)
+
+def notify(environment, message)
+  emoji = ':memo:'
+  if message.include?('Apply')
+    emoji = ':construction:'
+    emoji = ':white_check_mark:' if message.include?('dry-run')
+  end
+
+  subject = "environment: #{environment}"
+  puts "#{subject}\n#{message}"
+
+  slack = Slack::Incoming::Webhooks.new SLACK_WEB_HOOK_URL
+  slack.post("#{emoji} #{subject} #{emoji}\n#{message}")
+end
 
 def database_config
   database_yml = File.expand_path("../database.yml", __FILE__)
@@ -40,7 +59,6 @@ def export(environment, database, table, options = {}, &block)
   args = ["--export"]
   args.concat ["--tables", table] if table
   args << "--ignore-tables '#{options[:ignore_tables].join(",")}'" if options[:ignore_tables]
-
   Dir.mktmpdir do |dir|
     args.concat ["--output #{dir}/Schemafile", "--split"]
     ridgepole(config_name, *args, &block)
@@ -61,3 +79,4 @@ def apply(environment, database, table, options = {}, &block)
   args << "--ignore-tables '#{options[:ignore_tables].join(",")}'" if options[:ignore_tables]
   ridgepole(config_name, *args, &block)
 end
+
