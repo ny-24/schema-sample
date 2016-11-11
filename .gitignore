@@ -18,7 +18,6 @@ tmp
 .DS_Store
 test.rb
 Schemafile
-*.schema
 _site/
 config.yml
 /gemfiles/*.lock
