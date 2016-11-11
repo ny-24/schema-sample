@@ -5,6 +5,7 @@ require "fileutils"
 require "open3"
 require "dotenv"
 require "slack/incoming/webhooks"
+require 'rake'
 
 Dotenv.load
 SLACK_WEB_HOOK_URL = ENV['SLACK_WEB_HOOK_URL']
@@ -23,6 +24,11 @@ def notify(environment, message)
 
   slack = Slack::Incoming::Webhooks.new SLACK_WEB_HOOK_URL
   slack.post("#{emoji} #{subject} #{emoji}\n#{message}")
+end
+
+def switch_master_branch
+  sh 'git checkout master'
+  sh 'git pull upstream master'
 end
 
 def database_config
@@ -79,4 +85,3 @@ def apply(environment, database, table, options = {}, &block)
   args << "--ignore-tables '#{options[:ignore_tables].join(",")}'" if options[:ignore_tables]
   ridgepole(config_name, *args, &block)
 end
-
