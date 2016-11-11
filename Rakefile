@@ -34,6 +34,7 @@ namespace :production do
   end
 
   task :'dry-run', :database, :table do |t, args|
+    switch_master_branch()
     apply(:production, args[:database], args[:table], dry_run: true) do |line|
       output_text << line
     end
@@ -41,6 +42,7 @@ namespace :production do
   end
 
   task :apply, :database, :table do |t, args|
+    switch_master_branch()
     apply(:production, args[:database], args[:table]) do |line|
       output_text << line
     end
