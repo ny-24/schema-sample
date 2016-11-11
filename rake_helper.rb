@@ -29,6 +29,7 @@ end
 def switch_master_branch
   sh 'git checkout master'
   sh 'git pull upstream master'
+  sh 'git reset --hard upstream/master'
 end
 
 def database_config
