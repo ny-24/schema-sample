@@ -1,3 +1,5 @@
 require 'articles.schema'
 require 'blogs.schema'
 require 'comments.schema'
+require 'hoge.schema'
+require 'providers_levels.schema'

@@ -1,0 +1,14 @@
+create_table "providers_levels", force: :cascade do |t|
+  t.integer  "provider_id",            limit: 4,                 null: false
+  t.integer  "level",                  limit: 4, default: 0,     null: false
+  t.integer  "former_activated_level", limit: 4
+  t.integer  "new_level",              limit: 4
+  t.integer  "reached_level",          limit: 4
+  t.integer  "activation_status",      limit: 4, default: 0,     null: false
+  t.boolean  "manual_elevated_fg",               default: false, null: false
+  t.boolean  "notification_sent_fg",             default: false, null: false
+  t.datetime "created",                                          null: false
+  t.datetime "modified",                                         null: false
+end
+
+add_index "providers_levels", ["provider_id", "activation_status"], name: "idx_providers_levels_01", using: :btree
