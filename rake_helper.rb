@@ -5,7 +5,6 @@ require "fileutils"
 require "open3"
 require "dotenv"
 require "slack/incoming/webhooks"
-require 'rake'
 
 Dotenv.load
 SLACK_WEB_HOOK_URL = ENV['SLACK_WEB_HOOK_URL']
@@ -26,10 +25,31 @@ def notify(environment, message)
   slack.post("#{emoji} #{subject} #{emoji}\n#{message}")
 end
 
+def execute_command(command)
+  command_result = ''
+  IO.popen(command, :err => [:child, :out]).each { |line| command_result << line }
+  command_result
+end
+
 def switch_master_branch
-  sh 'git checkout master'
-  sh 'git pull upstream master'
-  sh 'git reset --hard upstream/master'
+  RESPONSES = {
+    :checkout_master_01 => "Switched to branch 'master'",
+    :checkout_master_02 => "Already on 'master'",
+    :pull_origin_master => "Already up-to-date.",
+  }
+  # masterブランチに切り替え
+  command_result = execute_command('git checkout master')
+  if (!command_result.include?(RESPONSES[:checkout_master_01]) && !command_result.include?(RESPONSES[:checkout_master_02]))
+    puts '[ERROR]git checkout master'
+    exit(1)
+  end
+
+  # 最新のソースな事を確認
+  command_result = execute_command('git pull origin master')
+  if (!command_result.include?(RESPONSES[:pull_origin_master]))
+    puts '[ERROR]git pull origin master'
+    exit(1)
+  end
 end
 
 def database_config
