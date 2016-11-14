@@ -40,13 +40,13 @@ def switch_master_branch
   # masterブランチに切り替え
   command_result = execute_command('git checkout master')
   if (!command_result.include?(RESPONSES[:checkout_master_01]) && !command_result.include?(RESPONSES[:checkout_master_02]))
-    raise "[git error] git checkout master"
+    raise "failed to switch to master branch"
   end
 
-  # 最新のソースな事を確認
+  # 最新のソースを取得
   command_result = execute_command('git pull origin master')
   if (!command_result.include?(RESPONSES[:pull_origin_master]))
-    raise "[git error] git pull origin master"
+    raise "failed to pull from repository"
   end
 end
 
