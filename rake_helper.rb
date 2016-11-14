@@ -11,6 +11,12 @@ SLACK_WEB_HOOK_URL = ENV['SLACK_WEB_HOOK_URL']
 
 PROJECT_DIR = File.expand_path("..", __FILE__)
 
+RESPONSES = {
+  :checkout_master_01 => "Switched to branch 'master'",
+  :checkout_master_02 => "Already on 'master'",
+  :pull_origin_master => "Already up-to-date."
+}
+
 def notify(environment, message)
   emoji = ':memo:'
   if message.include?('Apply')
@@ -32,11 +38,6 @@ def execute_command(command)
 end
 
 def switch_master_branch
-  RESPONSES = {
-    :checkout_master_01 => "Switched to branch 'master'",
-    :checkout_master_02 => "Already on 'master'",
-    :pull_origin_master => "Already up-to-date.",
-  }
   # masterブランチに切り替え
   command_result = execute_command('git checkout master')
   if (!command_result.include?(RESPONSES[:checkout_master_01]) && !command_result.include?(RESPONSES[:checkout_master_02]))
