@@ -16,6 +16,19 @@ RESPONSES = {
   :checkout_master_02 => "Already on 'master'",
   :pull_origin_master => "Already up-to-date."
 }
+# ➜  schema-sample git:(hoge) ✗ git fetch origin
+# remote: Counting objects: 3, done.
+# remote: Compressing objects: 100% (1/1), done.
+# remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+# Unpacking objects: 100% (3/3), done.
+# From github.com:ny-24/schema-sample
+#    406a3a6..9d20980  master     -> origin/master
+# ➜  schema-sample git:(hoge) ✗ git fetch origin
+# ➜  schema-sample git:(hoge) ✗ git reset --hard origin/master
+# HEAD is now at 9d20980 tmp
+#
+# ➜  schema-sample git:(hoge) ✗ git clean -f
+# Removing test
 
 def notify(environment, message)
   emoji = ':memo:'
